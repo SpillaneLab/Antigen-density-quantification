@@ -48,27 +48,27 @@
        		run("Duplicate...", "duplicate range=2");
        		rename("Image");
        		
-			//Subtract background counts - change for microscope used
+		//Subtract background counts - change for microscope used
        		run("Subtract...", "value=100");
        		
-			//Crop to remove uneven illumination at the edges
-			makeRectangle(360, 360, 400, 300);
-			run("Crop");
-			
-			//Rename resulting image
-			rename("Crop");
+		//Crop to remove uneven illumination at the edges
+		makeRectangle(360, 360, 400, 300);
+		run("Crop");
+		
+		//Rename resulting image
+		rename("Crop");
 			
        		//Measure mean fluorescence intensity for the image
-			run("Set Measurements...", "mean redirect=None decimal=3");
-			run("Measure");
+		run("Set Measurements...", "mean redirect=None decimal=3");
+		run("Measure");
 
-			//Save the processed image
-			selectWindow("Crop");
-			outName1 = "Processed_" + imagesName;
-			saveAs("tif", outputDir + "/" + outName1);
+		//Save the processed image
+		selectWindow("Crop");
+		outName1 = "Processed_" + imagesName;
+		saveAs("tif", outputDir + "/" + outName1);
 			
        		//Close everything before opening a new image for the same condition
-			run("Close All");
+		run("Close All");
       }
   }
 
