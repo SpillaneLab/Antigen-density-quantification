@@ -8,7 +8,7 @@ Macros get the mean fluorescence intensity for the sample and lipid to be used t
 Analysis performed using Fiji (Schindelin et al., 2012). 
 1.	Copy the code (from browser or download as .txt) and paste into macro window as: 
      Plugins > New > Macro
-2.	Ensure the language is set to IJ1 Macro in the Language tab of the Macro window. 
+2.	Ensure the language is set to IJ1 Macro in the Language tab of the macro window. 
 3.	Save the macro using .ijm extension. 
 # Authors
 Hannah McArthur – macros and description. 
