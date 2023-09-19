@@ -1,0 +1,77 @@
+   //This macro obtains the mean fluorescence intensity 2um above the focal plane, used to determine the correction factor 
+   //Imaging is setup to measure at the focal plane and 2um above (2-slice Z-stack image)
+   
+   dir = getDirectory("Choose a directory ");
+   outputDir = getDirectory("Select an output directory");
+   setBatchMode(true);
+   count = 0;
+   countFiles(dir);
+   n = 0;
+   processFiles(dir);
+   //print(count+" files processed");
+   
+   function countFiles(dir) {
+      list = getFileList(dir);
+      for (i=0; i<list.length; i++) {
+          if (endsWith(list[i], "/"))
+              countFiles(""+dir+list[i]);
+          else
+              count++;
+      }
+  }
+
+   function processFiles(dir) {
+      list = getFileList(dir);
+      for (i=0; i<list.length; i++) {
+          if (endsWith(list[i], "/"))
+              processFiles(""+dir+list[i]);
+          else {
+             showProgress(n++, count);
+             path = dir+list[i];
+             processFile(path);
+          }
+      }
+  }
+
+  function processFile(path) {
+       if (endsWith(path, ".tif")) {
+       		//Open the image
+       		open(path);
+       		
+       		//Get the file name 
+       		imagesName=getTitle();
+       		
+       		//Set image properties
+       		run("Properties...", "channels=1 slices=2 frames=1 unit=µm pixel_width=0.11 pixel_height=0.11 voxel_depth=1.0000000");
+       		
+       		//Duplicate the second slice (imaged at 2um) and rename 
+       		run("Duplicate...", "duplicate range=2");
+       		rename("Image");
+       		
+			//Subtract background counts - change for microscope used
+       		run("Subtract...", "value=100");
+       		
+			//Crop to remove uneven illumination at the edges
+			makeRectangle(360, 360, 400, 300);
+			run("Crop");
+			
+			//Rename resulting image
+			rename("Crop");
+			
+       		//Measure mean fluorescence intensity for the image
+			run("Set Measurements...", "mean redirect=None decimal=3");
+			run("Measure");
+
+			//Save the processed image
+			selectWindow("Crop");
+			outName1 = "Processed_" + imagesName;
+			saveAs("tif", outputDir + "/" + outName1);
+			
+       		//Close everything before opening a new image for the same condition
+			run("Close All");
+      }
+  }
+
+	//Save the results table
+	saveAs("Results", outputDir + "/Results.csv");
+	run("Clear Results");
