@@ -1,6 +1,6 @@
-  	//This macro gets mean fluorescence intensities for antigen density quantification 
+  //This macro gets mean fluorescence intensities for antigen density quantification 
   	
-  	//Select all relevant directories 
+  //Select all relevant directories 
   
    dir = getDirectory("Choose a directory ");
    outputDir = getDirectory("Select an output directory");
